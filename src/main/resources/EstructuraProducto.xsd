@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://com.Producto" targetNamespace="http://com.Producto" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <!-- Definición del tipo de datos Producto -->
+    <xs:complexType name="Producto">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="precio" type="xs:double"/>
+            <xs:element name="numeroserie" type="xs:int"/>
+            <xs:element name="inventarios" type="xs:int"/>
+            <xs:element name="descuentos" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Definición del elemento Producto -->
+    <xs:element name="Producto" type="tns:Producto"/>
+
+    <!-- Definiciones de elementos y tipos de petición y respuesta -->
+    <xs:element name="getIdProductoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:int"/>
+                <xs:element name="idLength" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getIdProductoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="IdProducto" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getNombreProductoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getNombreProductoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NombreProducto" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getDescripcionRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="description" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getDescripcionResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Descripcion" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getPrecioRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Precio" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getPrecioResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Precio" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getNumeroDeSerieRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroserie" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getNumeroDeSerieResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroserie" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getInventariosRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="inventarios" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getInventariosResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="inventarios" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getDescuentosRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="descuentos" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getDescuentosResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="descuentos" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getProductoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getProductoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="producto" type="tns:Producto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+
