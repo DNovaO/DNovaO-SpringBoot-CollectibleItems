@@ -1,18 +1,21 @@
 package com.itq.VentasColeccionables;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
+import producto.com.Producto;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import producto.com.Producto; // Importar la clase Producto del paquete adecuado
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
+import java.util.logging.Logger;
 
 @Component
 public class ProductoRepository {
-    private static final Map<Integer, Producto> productos = new HashMap<>(); // Cambiar el tipo de clave del Map a Integer, asumiendo que el ID es único
+    private static final Map<Integer, Producto> productos = new HashMap<>();
+    private static final Logger logger = Logger.getLogger(ProductoRepository.class.getName());
 
     @PostConstruct
     public void initData() {
@@ -22,42 +25,82 @@ public class ProductoRepository {
         producto1.setName("Camiseta");
         producto1.setDescription("Una camiseta de algodón de alta calidad");
         producto1.setPrecio(20.0);
-        producto1.setNumeroserie(12345); // Se agrega un número de serie como ejemplo
-        producto1.setInventarios(10); // Se agrega una cantidad inicial de inventario
-        producto1.setDescuentos(0); // No hay descuento inicialmente
+        producto1.setNumeroserie(12345);
+        producto1.setInventarios(10);
+        producto1.setDescuentos(0);
 
-        Producto producto2 = new Producto();
-        producto2.setId(2);
-        producto2.setName("Figura coleccionable");
-        producto2.setDescription("Una figura de acción coleccionable");
-        producto2.setPrecio(35.0);
-        producto2.setNumeroserie(67890); // Se agrega un número de serie como ejemplo
-        producto2.setInventarios(5); // Se agrega una cantidad inicial de inventario
-        producto2.setDescuentos(0); // No hay descuento inicialmente
-
-        Producto producto3 = new Producto();
-        producto3.setId(3);
-        producto3.setName("Poster");
-        producto3.setDescription("Un póster de edición limitada de una película famosa");
-        producto3.setPrecio(15.0);
-        producto3.setNumeroserie(13579); // Se agrega un número de serie como ejemplo
-        producto3.setInventarios(20); // Se agrega una cantidad inicial de inventario
-        producto3.setDescuentos(0); // No hay descuento inicialmente
-
-        // Agregamos los productos al mapa utilizando el ID como clave
-        productos.put(producto1.getId(), producto1);
-        productos.put(producto2.getId(), producto2);
-        productos.put(producto3.getId(), producto3);
+        // Agregamos el primer producto
+        addProducto(producto1);
     }
 
-    // Método para encontrar un producto por su ID
     public Producto findProducto(int id) {
         Assert.isTrue(id > 0, "El ID del producto debe ser mayor que cero");
+        Assert.isTrue(productos.containsKey(id), "El ID del producto no existe, verifica la información");
+
         return productos.get(id);
     }
 
-    // Método para obtener todos los productos
     public List<Producto> getAllProductos() {
         return new ArrayList<>(productos.values());
+    }
+
+    public void addProducto(@Validated Producto producto) {
+        Assert.notNull(producto, "El producto no puede ser nulo");
+        Assert.isTrue(producto.getId() > 0, "El ID del producto debe ser mayor que cero");
+        Assert.isTrue(!productos.containsKey(producto.getId()), "El ID del producto ya está en uso");
+
+        productos.put(producto.getId(), producto);
+        logger.info("Producto agregado: " + producto.getId());
+    }
+
+    public void verificarProducto(@Validated Producto producto) {
+        // Verificar cada atributo del producto
+        if (producto.getId() <= 0) {
+            throw new IllegalArgumentException("El ID del producto debe ser mayor que cero");
+        }
+        if (producto.getName() == null || producto.getName().isEmpty() || producto.getName().isBlank()
+                || producto.getName().equals("?")) {
+            throw new IllegalArgumentException(
+                    "El nombre del producto no puede estar vacío, ser nulo o contener solo '?'");
+        }
+        if (producto.getDescription() == null || producto.getDescription().isEmpty()
+                || producto.getDescription().isBlank() || producto.getDescription().equals("?")) {
+            throw new IllegalArgumentException(
+                    "La descripción del producto no puede estar vacía, ser nula o contener solo '?'");
+        }
+        if (producto.getPrecio() <= 0) {
+            throw new IllegalArgumentException("El precio del producto debe ser mayor que cero");
+        }
+        if (producto.getNumeroserie() <= 0) {
+            throw new IllegalArgumentException("El número de serie del producto debe ser mayor que cero");
+        }
+        if (producto.getInventarios() < 0) {
+            throw new IllegalArgumentException("El inventario del producto no puede ser negativo");
+        }
+        if (producto.getDescuentos() < 0) {
+            throw new IllegalArgumentException("Los descuentos del producto no pueden ser negativos");
+        }
+    }
+
+    public Producto modificarProducto(Producto productoModificado) {
+        Assert.notNull(productoModificado, "El producto modificado no puede ser nulo");
+        Assert.isTrue(productoModificado.getId() > 0, "El ID del producto debe ser mayor que cero");
+        Assert.isTrue(productos.containsKey(productoModificado.getId()), "El ID del producto no existe");
+    
+        // Obtener el ID del producto modificado
+        int id = productoModificado.getId();
+    
+        // Actualizar el producto en el mapa de productos
+        productos.put(id, productoModificado);
+    
+        logger.info("Producto modificado: " + id);
+    
+        return productoModificado;
+    }
+
+    public void deleteProducto(int id) {
+        Assert.isTrue(id > 0, "El ID del producto debe ser mayor que cero");
+        productos.remove(id);
+        logger.info("Producto eliminado: " + id);
     }
 }
